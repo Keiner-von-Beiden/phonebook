@@ -66,7 +66,7 @@ const App = () => {
           .remove(person.id)
           .then(response => {
             setPersons(persons.filter(item => item.id !== person.id))
-            setNotificationMessage(`${response.data.name} has been successfully deleted`)
+            setNotificationMessage(`The entry has been successfully deleted`) // was ${response.data.name} which didn't work 
             setTimeout(() => {
               setNotificationMessage(null)
             }, 5000)
@@ -93,7 +93,7 @@ const App = () => {
         newNumber={newNumber}
       />
 
-      <h2>Numbers</h2>
+      <h3>Numbers</h3>
       <Numbers persons={persons} deletePerson={deleteThisPerson}/>
     </div>
   )
