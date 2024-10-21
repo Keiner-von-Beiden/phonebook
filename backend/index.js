@@ -1,7 +1,10 @@
+// run this with 'npm start <MongoDB-password>'
+
 const express = require('express')
 const app = express()
 var morgan = require('morgan')
 const cors = require('cors')
+const mongoose = require('mongoose')
 
 app.use(cors())
 app.use(express.static('dist'))
@@ -30,6 +33,33 @@ let persons = [
 ]
 
 
+const password = process.argv[2]
+
+
+const url =
+  `mongodb+srv://db-admin:${password}@cluster0.orluu.mongodb.net/phonebookApp?retryWrites=true&w=majority&appName=Cluster0`
+
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
+
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+personSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
+
+const Person = mongoose.model('Person', personSchema) 
+
+
+
 app.use(express.json())     // taking json-parser in usage
 app.use(morgan(':method method to :url, Status :status, Content lenght :res[content-length], Response time :response-time ms'))
 
@@ -38,7 +68,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+  Person.find({}).then(result => {
+    response.json(result)
+  })
 })
 
 app.get('/info', (request, response) => {
