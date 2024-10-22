@@ -8,8 +8,6 @@ const Person = require('./models/person')
 app.use(cors())
 app.use(express.static('dist'))
 
-const password = process.argv[2]
-
 
 app.use(express.json())     // taking json-parser in usage
 app.use(morgan(':method method to :url, Status :status, Content lenght :res[content-length], Response time :response-time ms'))
@@ -28,17 +26,11 @@ app.get('/api/persons/:id', (request, response) => {
   })
 })
 
-// app.delete('/api/persons/:id', (request, response) => {
-//     const id = Number(request.params.id)
-//     persons = persons.filter(item => item.id !== id)
-//   
-//     response.status(204).end()
-// })
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
-
-  if (body.content === undefined) {
+  console.log(body, typeof(body), body.content)
+  if (body.name === undefined || body.number === undefined) {
     return response.status(400).json({ error: 'content missing' })
   }
 
@@ -52,13 +44,6 @@ app.post('/api/persons', (request, response) => {
   })
 })
 
-
-//   const existingNames = persons.map(item => item.name)
-//    if ( existingNames.includes(person.name) ) {
-//        return response.status(400).json({
-//            error: 'This name is already in the phonebook'
-//        })
-//    }
   
 const PORT = process.env.PORT
 app.listen(PORT, () => {
