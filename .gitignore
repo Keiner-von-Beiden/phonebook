@@ -19,6 +19,8 @@ backend/node_modules
 node_modules/
 frontend/*.local
 backend/*.local
+frontend/.env
+backend/.env
 
 # Editor directories and files
 frontend/.vscode/*
